@@ -15,3 +15,4 @@ Docker:
 Use Linux Alpine base image.
 user-config.jam heredoc docker syntax.
 Cross-compile pyd for win x64.
+Clarify Licensing (PSF derived?)
