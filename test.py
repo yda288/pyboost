@@ -28,7 +28,7 @@ class TestParser:
 
 class TestRawParser:
     def test_inproduct(self):
-        assert(rawserialisedparser.parse(inproduct) == (["vector['foo.Foo']"], ["tuple['double', 'double']", 'string']))
+        assert(rawserialisedparser.parse(inproduct) == (["vector['foo.Foo']"], ["vector['tuple['double', 'double']", 'string']))
 
     def test_builtins_only(self):
         assert(rawserialisedparser.parse(builtins_only) == (['complex'], ['double', 'int']))

@@ -1,5 +1,5 @@
 
-from serialised import *
+from rawserialised import *
 from boostmappings import mappings
 # def walk_args(func):
 #     #filter(lambda f: isinstance(f, FuncDef), funcs)
@@ -11,20 +11,26 @@ from boostmappings import mappings
 #
 #         arg.variable
 
+# if 'args' in arg:
+#     chain = mapped(arg['type_ref']) + str([chain_nested(a) for a in arg['args']])
+#     nested_args.append(chain)
+# else:
+#     chain = chain_nested(arg)
+#     nested_args.append(chain)
+
 def parse(serialised):
-    print('hello')
     nested_args = []
     nested_ret = []
+
+    ##parse arg types
     try:
         for arg in serialised['type']['arg_types']:
-            if 'args' in arg:
-                chain = mapped(arg['type_ref']) + chain_nested(arg['args'][0])
-                nested_args.append(chain)
-            else:
-                chain = chain_nested(arg)
-                nested_args.append(chain)
+            chain = chain_nested(arg)
+            nested_args.append(chain)
     except:
         nested_args.append('None')
+
+    ##parse return types
     try:
         nested_ret.append(chain_nested(serialised['type']['ret_type']))
     except:
@@ -34,9 +40,9 @@ def parse(serialised):
 def chain_nested(arg):
     try:
         if 'args' in arg:
-            return mapped(arg['type_ref']) + str([chain_nested(a) for a in arg['args']])
+            return '%s%s' % (mapped(arg['type_ref']),[chain_nested(a) for a in arg['args']])
         elif 'items' in arg:
-            return str([chain_nested(i) for i in arg['items']])
+            return '%s%s' % (mapped(arg['fallback']['type_ref']), [chain_nested(i) for i in arg['items']])
         elif 'item' in arg:
             return chain_nested(arg['item'])
         else:
@@ -48,5 +54,5 @@ def mapped(builtin):
     return mappings.get(builtin, builtin)
 
 if __name__ == '__main__':
-    p = parse(unmapped_inproduct)
-    print(str(p))
+    p = parse(inproduct)
+    print(p)
